@@ -1,4 +1,4 @@
-import { checkAccountBalance, deposit } from '../src/bankAccount';
+import { checkAccountBalance, deposit, withdraw } from '../src/bankAccount';
 
 describe('bank account system', function() {
     describe('client abilities', () => {
@@ -33,6 +33,16 @@ describe('bank account system', function() {
 
             expect(checkAccountBalance(bankAccount))
                 .toBeGreaterThan(previousBalance);
+        });
+    });
+
+    describe('client can withdrawal', () => {
+        test('account balance will decrease', () => {
+            let bankAccount = { balance: 100 };
+
+            bankAccount = withdraw(bankAccount, 50);
+
+            expect(checkAccountBalance(bankAccount)).toStrictEqual(50);
         });
     });
 });

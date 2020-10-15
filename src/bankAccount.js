@@ -7,3 +7,9 @@ export const deposit = (bankAccount, amount) => {
 
     return { ...bankAccount, balance: newBalance };
 };
+
+export const withdraw = (bankAccount, amount) => {
+    const newBalance = bankAccount.balance -= amount;
+
+    return { ...bankAccount, balance: newBalance };
+};
