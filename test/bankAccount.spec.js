@@ -1,48 +1,37 @@
-import { checkAccountBalance, deposit, withdraw } from '../src/bankAccount';
+import { Account } from '../src/bankAccount';
 
 describe('bank account system', function() {
     describe('client abilities', () => {
         test('check empty account balance', () => {
-            const bankAccount = { balance: 0 };
+            const account = Account(0);
 
-            expect(checkAccountBalance(bankAccount)).toStrictEqual(0);
+            expect(account.getBalance()).toStrictEqual(0);
         });
 
         test('check account balance', () => {
-            const bankAccount = { balance: 100 };
+            const account = Account(100);
 
-            expect(checkAccountBalance(bankAccount)).toStrictEqual(100);
+            expect(account.getBalance()).toStrictEqual(100);
         });
     });
 
-    describe('client can deposit', () => {
-        test('account will be credited', () => {
-            let bankAccount = { balance: 0 };
-
-            bankAccount = deposit(bankAccount, 100);
-
-            expect(checkAccountBalance(bankAccount)).toStrictEqual(100);
-        });
-
+    describe('one deposit', () => {
         test('account balance increase when credited', () => {
-            let bankAccount = { balance: 0 };
+            const bankAccount = Account(0)
+                .deposit(100);
 
-            const previousBalance = checkAccountBalance(bankAccount);
-
-            bankAccount = deposit(bankAccount, 100);
-
-            expect(checkAccountBalance(bankAccount))
-                .toBeGreaterThan(previousBalance);
+            expect(bankAccount.getBalance())
+                .toStrictEqual(100);
         });
     });
 
     describe('client can withdrawal', () => {
         test('account balance will decrease', () => {
-            let bankAccount = { balance: 100 };
 
-            bankAccount = withdraw(bankAccount, 50);
+            let bankAccount = Account(100)
+                .withdraw(50);
 
-            expect(checkAccountBalance(bankAccount)).toStrictEqual(50);
+            expect(bankAccount.getBalance()).toStrictEqual(50);
         });
     });
 });
