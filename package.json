@@ -1,0 +1,25 @@
+{
+  "name": "bank-account-kata",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config jest.config.json",
+    "format": "prettier --write \"src/**/*.js\""
+  },
+  "author": "Alexis Bollia",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+    "jest": "^26.5.3",
+    "prettier": "^2.1.2"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
+  }
+}
