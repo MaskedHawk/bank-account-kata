@@ -1,4 +1,5 @@
-import { Account, OPERATION } from '../src/bankAccount';
+import { Account } from '../src/bankAccount';
+import { OPERATION } from '../src/operation';
 
 describe('bank account system', function() {
     describe('client abilities', () => {
@@ -7,17 +8,11 @@ describe('bank account system', function() {
 
             expect(account.getBalance()).toStrictEqual(0);
         });
-
-        test('check account balance', () => {
-            const account = Account(100);
-
-            expect(account.getBalance()).toStrictEqual(100);
-        });
     });
 
     describe('one deposit', () => {
         test('account balance increase when credited', () => {
-            const bankAccount = Account(0)
+            const bankAccount = Account()
                 .deposit(100);
 
             expect(bankAccount.getBalance())
@@ -28,7 +23,8 @@ describe('bank account system', function() {
     describe('client can withdrawal', () => {
         test('account balance will decrease', () => {
 
-            let bankAccount = Account(100)
+
+            const bankAccount = Account(100)
                 .withdraw(50);
 
             expect(bankAccount.getBalance()).toStrictEqual(50);
@@ -49,10 +45,16 @@ describe('bank account system', function() {
 
         test('operation appear in bank history', () => {
 
-            let bankAccount = Account(100)
+            const bankAccount = Account(100)
                 .deposit(50);
 
             expect(bankAccount.getHistory()).toStrictEqual([
+                {
+                    operation: OPERATION.INIT,
+                    date: new Date(),
+                    amount: 100,
+                    balance: 100
+                },
                 {
                     operation: OPERATION.DEPOSIT,
                     date: new Date(),
@@ -64,11 +66,17 @@ describe('bank account system', function() {
 
         test('multiple operations appear in bank history', () => {
 
-            let bankAccount = Account(100)
+            const bankAccount = Account(100)
                 .deposit(50)
                 .withdraw(20);
 
             expect(bankAccount.getHistory()).toStrictEqual([
+                {
+                    operation: OPERATION.INIT,
+                    date: new Date(),
+                    amount: 100,
+                    balance: 100
+                },
                 {
                     operation: OPERATION.DEPOSIT,
                     date: new Date(),
@@ -78,7 +86,7 @@ describe('bank account system', function() {
                 {
                     operation: OPERATION.WITHDRAW,
                     date: new Date(),
-                    amount: 20,
+                    amount: -20,
                     balance: 130
                 }
             ]);

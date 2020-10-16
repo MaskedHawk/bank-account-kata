@@ -1,48 +1,33 @@
-export const OPERATION = {
-    WITHDRAW: 'Withdraw',
-    DEPOSIT: 'Deposit'
-};
-
-export const getCurrentDate = () => new Date();
+import { getTotalBalanceOfOperation, makeOperation, OPERATION } from './operation';
 
 export const Account = (() => {
-    const makeAccount = (balance, history) => {
+    const makeAccount = (operations) => {
 
-        const _balance = balance.reduce(
-            (acc, value) => acc + value
-        );
-
-        const _history = history;
 
         const deposit = (amount) => {
             return makeAccount(
-                [...balance, amount],
-                [...history, {
+                [...operations, makeOperation({
                     operation: OPERATION.DEPOSIT,
-                    date: getCurrentDate(),
-                    amount: amount,
-                    balance: _balance + amount
-                }]);
+                    amount: amount
+                })]
+            );
         };
 
         const withdraw = (amount) => {
             return makeAccount(
-                [...balance, -amount],
-                [...history, {
+                [...operations, makeOperation({
                     operation: OPERATION.WITHDRAW,
-                    date: getCurrentDate(),
-                    amount: amount,
-                    balance: _balance - amount
-                }]
+                    amount: -amount
+                })]
             );
         };
 
         const getBalance = () => {
-            return _balance;
+            return getTotalBalanceOfOperation(operations);
         };
 
         const getHistory = () => {
-            return _history;
+            return getOperationsHistory(operations);
         };
 
         return Object.freeze({
@@ -53,7 +38,20 @@ export const Account = (() => {
         });
     };
 
-    return (amount) => makeAccount([amount], []);
+    return (amount = 0) => makeAccount([
+        makeOperation({ operation: OPERATION.INIT, amount })
+    ]);
 })();
+
+const getCumulativeSum = (previousBalance => ({ amount }) => previousBalance += amount);
+
+const getOperationsHistory = (operations) => {
+    const getNewBalance = getCumulativeSum(0);
+
+    return operations.map((operation) => ({
+        ...operation,
+        balance: getNewBalance(operation)
+    }));
+};
 
 
